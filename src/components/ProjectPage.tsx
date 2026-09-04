@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { content, type Project } from "@/data/content";
 import { useCurtain } from "@/components/CurtainProvider";
 import { useIsMobileLayout } from "@/hooks/useIsMobileLayout";
+import { NotFoundPage } from "@/components/NotFoundPage";
 import { PageShell } from "@/components/PageShell";
 import { IntroText, INTRO_SUBTITLE_DELAY_S } from "@/components/IntroText";
 import { ProjectMeta } from "@/components/ProjectMeta";
@@ -39,13 +40,7 @@ export function ProjectPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [navigate, triggerCurtain]);
 
-  if (!project)
-    return (
-      <Navigate
-        to="/"
-        replace
-      />
-    );
+  if (!project) return <NotFoundPage />;
 
   if (isMobileLayout) {
     return (

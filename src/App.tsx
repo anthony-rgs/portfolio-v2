@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { HomeIndexPage } from "@/components/HomeIndexPage";
 import { ProjectPage } from "@/components/ProjectPage";
 import { InfoPage } from "@/components/InfoPage";
+import { NotFoundPage } from "@/components/NotFoundPage";
 import { PageLoadCurtain } from "@/components/PageLoadCurtain";
 import { CurtainProvider } from "@/components/CurtainProvider";
 import { FirstLoadIntro } from "@/components/FirstLoadIntro";
@@ -34,6 +35,10 @@ function AppRoutes() {
         <Route
           path="/about"
           element={<InfoPage />}
+        />
+        <Route
+          path="*"
+          element={<NotFoundPage />}
         />
       </Routes>
       {!isFirstMount && <PageLoadCurtain key={location.pathname} />}
