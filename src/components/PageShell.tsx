@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 
@@ -12,6 +12,14 @@ interface PageShellProps {
 // (`flex-1`) — 100dvh minus the navbar, no calc() needed.
 export function PageShell({ children, onBack }: PageShellProps) {
   const location = useLocation();
+
+  // Below lg, pages scroll natively — client-side navigation doesn't reset
+  // that on its own, so leaving a scrolled-down mobile page lands on the
+  // next one already scrolled down. Happens under the still-covering
+  // curtain, so it's invisible.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <div
