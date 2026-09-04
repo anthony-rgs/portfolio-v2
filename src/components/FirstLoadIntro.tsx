@@ -186,6 +186,19 @@ function preloadAudio(src: string): Promise<void> {
   );
 }
 
+function preloadVideo(src: string): Promise<void> {
+  return withTimeout(
+    new Promise((resolve) => {
+      const video = document.createElement("video");
+      video.oncanplaythrough = () => resolve();
+      video.onerror = () => resolve();
+      video.preload = "auto";
+      video.muted = true;
+      video.src = src;
+    }),
+  );
+}
+
 interface FirstLoadIntroProps {
   // Fires once the curtain starts falling — the real page isn't rendered
   // until then, so its entrance animations play for real instead of
@@ -193,9 +206,9 @@ interface FirstLoadIntroProps {
   onDone: () => void;
 }
 
-// Plays once per real page load. Preloads the project images + fonts this
-// same request will need in a moment, shows the name + a real progress
-// counter while that happens, then drops away like a curtain.
+// Plays once per real page load. Preloads project thumbnails, each
+// project's first two gallery entries, the Info photo, and fonts, shows the
+// name + a real progress counter while that happens, then drops away like a curtain.
 export function FirstLoadIntro({ onDone }: FirstLoadIntroProps) {
   const [visible, setVisible] = useState(true);
   const [falling, setFalling] = useState(false);
@@ -220,6 +233,16 @@ export function FirstLoadIntro({ onDone }: FirstLoadIntroProps) {
     const isMobileLayout = window.innerWidth < 1024;
     const tasks: Promise<void>[] = [
       ...content.projects.map((project) => preloadImage(project.src)),
+      // First two gallery entries per project — enough to cover what's
+      // visible without scrolling, without preloading every project's full gallery.
+      ...content.projects.flatMap((project) =>
+        project.images
+          .slice(0, 2)
+          .map((image) =>
+            image.video ? preloadVideo(image.src) : preloadImage(image.src),
+          ),
+      ),
+      preloadImage("/img/me.webp"),
       ...(isMobileLayout
         ? []
         : content.tracks.map((track) => preloadAudio(track.src))),
