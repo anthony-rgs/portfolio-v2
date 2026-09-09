@@ -127,7 +127,7 @@ export function ProjectMeta({
           each link as its own outer-row item, which split them across
           lines independently. */}
       {links.length > 0 && (
-        <div className="flex flex-wrap gap-x-10 gap-y-4">
+        <div className="flex flex-wrap gap-x-10 gap-y-4 min-[1024px]:flex-nowrap">
           {links.map((l, i) => {
             // TAG_STAGGER_S between links — REVEAL_STAGGER_S is reserved
             // for the label-to-button offset, same as Contact/CV.
