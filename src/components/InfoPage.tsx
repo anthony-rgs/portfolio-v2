@@ -187,7 +187,7 @@ function Photo() {
       src="/img/me.webp"
       alt="Anthony Ringressi"
       style={{ aspectRatio: PHOTO_ASPECT }}
-      className="w-full object-cover"
+      className="w-full rounded-lg object-cover"
       initial={{ x: "100%" }}
       animate={{ x: "0%" }}
       transition={{
@@ -208,7 +208,7 @@ function MobilePhoto() {
       src="/img/me.webp"
       alt="Anthony Ringressi"
       style={{ aspectRatio: PHOTO_ASPECT }}
-      className="w-full object-cover"
+      className="w-full rounded-lg object-cover"
     />
   );
 }

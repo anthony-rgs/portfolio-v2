@@ -106,6 +106,7 @@ export function ProjectEndCard({
               height: "auto",
               flexShrink: 0,
             }}
+            className="rounded-lg"
           />
         </button>
       </ScrollRevealItem>

@@ -38,8 +38,11 @@ export function ProjectPreviewCarousel({
 
   return (
     // Matches the screenshot files' real aspect ratio so object-contain has
-    // nothing to letterbox.
-    <div className="pointer-events-none relative aspect-2940/1594 w-full overflow-hidden">
+    // nothing to letterbox. Rounded here too (redundant with the video/img's
+    // own rounded-md below) — border-radius directly on <video> is unreliable
+    // across browsers (hardware-accelerated decoding can bypass it), this
+    // overflow-hidden clip is the fallback that always shows a radius.
+    <div className="pointer-events-none relative aspect-2940/1594 w-full overflow-hidden rounded-md">
       {/* Keyed per project: the curtain replays on every switch. No
           mode="wait" — outgoing exits while incoming enters simultaneously,
           not sequentially, which read as a "jump" before. */}
@@ -60,7 +63,7 @@ export function ProjectPreviewCarousel({
                 // for a beat.
                 key={current.src}
                 src={current.src}
-                className="h-full w-full object-contain"
+                className="h-full w-full rounded-md object-contain"
                 autoPlay
                 muted
                 playsInline
@@ -72,7 +75,7 @@ export function ProjectPreviewCarousel({
               <img
                 src={current.src}
                 alt={project.name}
-                className="h-full w-full object-contain"
+                className="h-full w-full rounded-md object-contain"
               />
             )}
           </motion.div>

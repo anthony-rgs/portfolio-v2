@@ -14,6 +14,7 @@ import {
 } from "framer-motion";
 import { isWheelLocked } from "@/lib/wheelLock";
 import { TEXT_COLOR } from "@/lib/colors";
+import { cn } from "@/lib/utils";
 import type { ProjectImage } from "@/data/content";
 import { AutoplayVideo } from "@/components/AutoplayVideo";
 import {
@@ -126,8 +127,25 @@ export function ProjectGallery({
   });
 
   const tileWidth = tileHeight * TILE_ASPECT;
+  // contain images get their own width (image's real aspect ratio) instead
+  // of the uniform landscape tileWidth, so their container isn't wider than
+  // the content actually painted inside it.
+  const tileWidths = images.map((image) =>
+    image.contain && image.aspectRatio
+      ? tileHeight * image.aspectRatio
+      : tileWidth,
+  );
+  // Cumulative left edge of each tile — replaces the uniform
+  // i * (tileWidth + TILE_GAP) math once tile widths can vary.
+  const tileLefts = tileWidths.reduce<number[]>((acc, _, i) => {
+    acc.push(i === 0 ? 0 : acc[i - 1] + tileWidths[i - 1] + TILE_GAP);
+    return acc;
+  }, []);
   const imagesWidth =
-    images.length > 0 ? images.length * (tileWidth + TILE_GAP) - TILE_GAP : 0;
+    tileWidths.length > 0
+      ? tileWidths.reduce((sum, w) => sum + w, 0) +
+        TILE_GAP * (tileWidths.length - 1)
+      : 0;
   // Where the end card sits along the track, before panning — needed by
   // the visibility check below.
   const endCardLocalLeft = imagesWidth + TILE_GAP + END_CARD_EXTRA_GAP_PX;
@@ -252,7 +270,7 @@ export function ProjectGallery({
       let label: string | null = null;
       let entered = false;
       images.forEach((image, i) => {
-        const left = containerLeftPx + i * (tileWidth + TILE_GAP) + panX;
+        const left = containerLeftPx + tileLefts[i] + panX;
         if (left > zoneEnd) return;
         entered = true;
         index = i;
@@ -282,7 +300,7 @@ export function ProjectGallery({
       setActiveLabel((prev) => (prev === label ? prev : label));
       setZoneEntered((prev) => (prev === entered ? prev : entered));
     });
-  }, [images, tileWidth, imageScrollMax, scrollProgress]);
+  }, [images, tileHeight, imageScrollMax, scrollProgress]);
 
   // Drives the end card's entrance via the endCard render prop, once its
   // left edge crosses END_CARD_REVEAL_ZONE_FRACTION.
@@ -353,22 +371,30 @@ export function ProjectGallery({
         >
           {images.map((image, i) =>
             image.video ? (
-              <AutoplayVideo
+              // Rounded on both this wrapper and the video itself —
+              // border-radius directly on <video> is unreliable across
+              // browsers (hardware-accelerated decoding can bypass it), the
+              // overflow-hidden wrapper is the fallback that always shows a radius.
+              <div
                 key={i}
-                src={image.src}
-                style={{ width: tileWidth, flexShrink: 0 }}
-                className="h-full object-cover"
-                // The same state driving the counter/label — not a
-                // separate visibility guess.
-                active={zoneEntered && i === activeIndex}
-              />
+                style={{ width: tileWidths[i], flexShrink: 0 }}
+                className="h-full overflow-hidden rounded-xl"
+              >
+                <AutoplayVideo
+                  src={image.src}
+                  className={cn("h-full w-full rounded-xl", image.contain ? "object-contain" : "object-cover")}
+                  // The same state driving the counter/label — not a
+                  // separate visibility guess.
+                  active={zoneEntered && i === activeIndex}
+                />
+              </div>
             ) : (
               <img
                 key={i}
                 src={image.src}
                 alt={alt}
-                style={{ width: tileWidth, flexShrink: 0 }}
-                className="h-full object-cover"
+                style={{ width: tileWidths[i], flexShrink: 0 }}
+                className={cn("h-full rounded-xl", image.contain ? "object-contain" : "object-cover")}
               />
             ),
           )}

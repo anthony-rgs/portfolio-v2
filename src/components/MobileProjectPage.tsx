@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Project } from "@/data/content";
 import { ACCENT_BLUE } from "@/lib/colors";
+import { cn } from "@/lib/utils";
 import {
   IntroText,
   INTRO_SUBTITLE_DELAY_S,
@@ -24,8 +25,8 @@ interface MobileProjectPageProps {
 
 const IMAGE_STAGGER_S = 0.06;
 const TILE_ASPECT = "2940/1594";
-const IMAGE_GRID_CLASSES = "grid grid-cols-1 gap-x-5 gap-y-10 xs:grid-cols-2";
-// Always 2 columns, not 1 below xs like IMAGE_GRID_CLASSES — text left,
+const IMAGE_GRID_CLASSES = "grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2";
+// Always 2 columns, not 1 below sm like IMAGE_GRID_CLASSES — text left,
 // image right, at every mobile/tablet width.
 const NEXT_PROJECT_GRID_CLASSES = "grid grid-cols-2 gap-x-4";
 // Matches InfoPage's own SECTION_GAP, so "distinct block" spacing reads the
@@ -78,7 +79,7 @@ function NextProjectLink({
         src={nextProject.src}
         alt={nextProject.name}
         style={{ aspectRatio: TILE_ASPECT }}
-        className="w-full object-cover"
+        className="w-full rounded-lg object-cover"
       />
     </button>
   );
@@ -136,22 +137,31 @@ export function MobileProjectPage({
           <InViewReveal
             key={i}
             delay={(i % 3) * IMAGE_STAGGER_S}
-            // Videos always take the full row — a clip shouldn't be
-            // squeezed into half a column.
-            className={image.video ? "xs:col-span-2" : undefined}
           >
             {image.video ? (
-              <AutoplayVideo
-                src={image.src}
-                style={{ aspectRatio: TILE_ASPECT }}
-                className="w-full object-cover"
-              />
+              // Rounded on both this wrapper and the video itself —
+              // border-radius directly on <video> is unreliable across
+              // browsers (hardware-accelerated decoding can bypass it), the
+              // overflow-hidden wrapper is the fallback that always shows a radius.
+              <div
+                style={{
+                  aspectRatio: image.contain && image.aspectRatio ? image.aspectRatio : TILE_ASPECT,
+                }}
+                className="overflow-hidden rounded-xl"
+              >
+                <AutoplayVideo
+                  src={image.src}
+                  className={cn("h-full w-full rounded-xl", image.contain ? "object-contain" : "object-cover")}
+                />
+              </div>
             ) : (
               <img
                 src={image.src}
                 alt={image.label ?? project.name}
-                style={{ aspectRatio: TILE_ASPECT }}
-                className="w-full object-cover"
+                style={{
+                  aspectRatio: image.contain && image.aspectRatio ? image.aspectRatio : TILE_ASPECT,
+                }}
+                className={cn("w-full rounded-xl", image.contain ? "object-contain" : "object-cover")}
               />
             )}
             {image.label && (

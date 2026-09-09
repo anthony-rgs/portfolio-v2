@@ -35,23 +35,39 @@ export function ScrollColumnItem({
   );
 
   return (
+    // Outer: itemHeight tall (image + TILE_GAP of empty space below it),
+    // purely for scroll positioning — no clip/radius here, since that
+    // padded box doesn't share an edge with the image at all.
     <motion.div
-      className="absolute inset-x-0 overflow-hidden"
+      className="absolute inset-x-0"
       style={{ y, height: itemHeight }}
     >
-      <motion.img
-        src={project.src}
-        alt={project.name}
-        // Read by ScrollingImageColumn's hover-follows-scroll check —
-        // onMouseEnter/Leave don't fire when the image moves under a
-        // stationary cursor.
-        data-slug={project.slug}
-        style={{ height: tileHeight }}
-        className="w-full cursor-pointer object-contain"
-        animate={{ scale: isActive ? 1.07 : 1 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        onClick={() => onNavigate(project)}
-      />
+      {/* Inner: sized to exactly tileHeight, matching the image itself —
+          its overflow-hidden + rounded-lg clip sits right at the image's
+          real edges, so the hover scale below clips symmetrically top and
+          bottom instead of bleeding into unrelated padded space.
+          willChange promotes this wrapper to a stable compositing layer
+          ahead of time — plain overflow-hidden + border-radius can still
+          fail to clip a transformed child on the edge it's newly growing
+          into (a known Chrome/WebKit bug) otherwise. */}
+      <div
+        className="overflow-hidden rounded-lg"
+        style={{ height: tileHeight, willChange: "transform" }}
+      >
+        <motion.img
+          src={project.src}
+          alt={project.name}
+          // Read by ScrollingImageColumn's hover-follows-scroll check —
+          // onMouseEnter/Leave don't fire when the image moves under a
+          // stationary cursor.
+          data-slug={project.slug}
+          style={{ height: tileHeight }}
+          className="w-full cursor-pointer object-contain"
+          animate={{ scale: isActive ? 1.05 : 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          onClick={() => onNavigate(project)}
+        />
+      </div>
     </motion.div>
   );
 }

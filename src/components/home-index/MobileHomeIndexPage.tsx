@@ -29,7 +29,7 @@ export function MobileHomeIndexPage({
         subtitleLines={content.home.subtitleLines}
       />
 
-      <div className="mt-12 grid grid-cols-1 gap-x-5 gap-y-10 xs:grid-cols-2">
+      <div className="mt-12 grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2">
         {content.projects.map((project, i) => (
           <InViewReveal
             key={project.slug}
@@ -45,7 +45,7 @@ export function MobileHomeIndexPage({
                 src={project.src}
                 alt={project.name}
                 style={{ aspectRatio: TILE_ASPECT }}
-                className="w-full object-cover"
+                className="w-full rounded-lg object-cover"
               />
               <div className="mt-2 text-[14px] font-medium tracking-tight sm:text-[15px]">
                 {project.name}
