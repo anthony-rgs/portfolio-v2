@@ -2,6 +2,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useAnimationFrame } from "framer-motion";
 import { content } from "@/data/content";
 import { cn } from "@/lib/utils";
+import { useMusicPlayer } from "@/components/MusicPlayerProvider";
 
 // Floor on how long this stays up, so it reads as an intentional beat, not
 // a flash, even if everything resolves instantly.
@@ -210,6 +211,7 @@ interface FirstLoadIntroProps {
 // project's first two gallery entries, the Info photo, and fonts, shows the
 // name + a real progress counter while that happens, then drops away like a curtain.
 export function FirstLoadIntro({ onDone }: FirstLoadIntroProps) {
+  const { play } = useMusicPlayer();
   const [visible, setVisible] = useState(true);
   const [falling, setFalling] = useState(false);
   const [displayPercent, setDisplayPercent] = useState(0);
@@ -288,6 +290,9 @@ export function FirstLoadIntro({ onDone }: FirstLoadIntroProps) {
 
   const handlePress = () => {
     if (!readyToPress || falling) return;
+    // Music is desktop-only (see MusicPlayer) — this tap is the user
+    // gesture browsers require before audio can autoplay.
+    if (window.innerWidth >= 1024) play();
     // The curtain keeps falling below, independent of onDone — the real
     // page mounts as it starts falling rather than once it's fully gone.
     setFalling(true);
