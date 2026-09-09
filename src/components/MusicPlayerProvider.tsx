@@ -10,7 +10,7 @@ import { content } from "@/data/content";
 
 const TRACKS = content.tracks;
 
-const VOLUME = 0.14;
+const VOLUME = 0.22;
 
 interface MusicPlayerContextValue {
   playing: boolean;
