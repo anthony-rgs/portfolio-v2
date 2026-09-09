@@ -287,6 +287,10 @@ export const content: SiteContent = {
       src: "/media/bene-bono/benebono.webp",
       images: [
         {
+          label: "Bene Bono",
+          src: "/media/bene-bono/benebono.webp",
+        },
+        {
           label:
             "Espace client dynamique en fonction du jour de la semaine et des états",
           src: "/media/bene-bono/benebono1.webp",
