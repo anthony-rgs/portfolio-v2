@@ -52,9 +52,11 @@ function GoHomeButton() {
 export function NotFoundPage() {
   return (
     <PageShell>
-      {/* Centered only at lg+, where PageShell is a fixed-height frame — below
-          that it sits at the top like every other page's mobile layout. */}
-      <div className="flex flex-col items-center pt-16 text-center lg:h-full lg:justify-center lg:pt-0">
+      {/* Centered only at 1024px+, where PageShell is a fixed-height frame —
+          below that it sits at the top like every other page's mobile
+          layout. Pinned to the same literal 1024px as PageShell's own
+          frame switch, not the `lg` token (text sizing uses that at 1200px). */}
+      <div className="flex flex-col items-center pt-16 text-center min-[1024px]:h-full min-[1024px]:justify-center min-[1024px]:pt-0">
         <RevealItem delay={INTRO_TITLE_DELAY_S}>
           <h1 className="text-[18vw] font-black leading-[0.9] tracking-tighter sm:text-[12vw] lg:text-[8vw]">
             404

@@ -6,12 +6,13 @@
 
   /* Four-tier breakpoint system for UI text sizing (labels, meta, small
      numbers — not the big vw-based page titles, which stay fluid).
-     mobile: <600px, sm (tablet): 600-1024px, lg (desktop): 1024-1800px,
-     xl (large desktop): 1800px+. lg matches Tailwind's own default
-     (64rem/1024px) already — redeclared here anyway so all four tiers are
-     defined together in one visible place. */
+     mobile: <600px, sm (tablet): 600-1200px, lg (desktop): 1200-1800px,
+     xl (large desktop): 1800px+. lg no longer matches the mobile/desktop
+     component-tree switch (useIsMobileLayout, PageShell's own frame switch —
+     both stay a literal 1024px, via min-[1024px]:) — this is text sizing
+     only, moved to 1200px on purpose so it lags a bit behind that switch. */
   --breakpoint-sm: 37.5rem; /* 600px */
-  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-lg: 75rem; /* 1200px */
   --breakpoint-xl: 112.5rem; /* 1800px */
   /* Extra step below sm, just for the mobile home project grid's 1/2/3-
      column breakpoints (450 / 768 / 1024) — md is Tailwind's own default

@@ -23,21 +23,25 @@ export function PageShell({ children, onBack }: PageShellProps) {
 
   return (
     <div
-      // min-h-dvh, not h-dvh: below lg, the page (Navbar included) is free
-      // to scroll natively with its content. lg:h-dvh pins the exact
-      // viewport height on desktop, where the wheel-driven galleries need
-      // a fixed frame.
-      className="font-aktiv flex min-h-dvh flex-col bg-[#fcfafa] text-[#030D26] lg:h-dvh"
+      // min-h-dvh, not h-dvh: below 1024px, the page (Navbar included) is
+      // free to scroll natively with its content. min-[1024px]:h-dvh pins
+      // the exact viewport height on desktop, where the wheel-driven
+      // galleries need a fixed frame — pinned to the same literal 1024px as
+      // useIsMobileLayout (not the `lg` token, which text sizing now uses
+      // at 1200px instead) so this frame switch always matches the actual
+      // mobile/desktop component tree switch.
+      className="font-aktiv flex min-h-dvh flex-col bg-[#fcfafa] text-[#030D26] min-[1024px]:h-dvh"
     >
       <Navbar onBack={onBack} />
       {/* key={location.pathname}: only this remounts on navigation, resetting
           any local scroll state (e.g. ProjectGallery's accumulator) that a
-          same-route param change wouldn't otherwise reset. lg:min-h-0: only
-          clipped to "whatever's left after Navbar" on desktop — below lg it
-          keeps auto min-height, free to grow to its content. */}
+          same-route param change wouldn't otherwise reset. min-[1024px]:min-h-0:
+          only clipped to "whatever's left after Navbar" on desktop — below
+          that it keeps auto min-height, free to grow to its content. Pinned
+          to the same 1024px as the h-dvh switch above, not the `lg` token. */}
       <main
         key={location.pathname}
-        className="relative flex-1 px-4 sm:px-5 lg:min-h-0 lg:pb-5"
+        className="relative flex-1 px-4 sm:px-5 min-[1024px]:min-h-0 min-[1024px]:pb-5"
       >
         {children}
       </main>
