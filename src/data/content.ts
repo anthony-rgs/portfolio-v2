@@ -79,7 +79,7 @@ export const content: SiteContent = {
       "Disponible pour des missions freelance ou CDI",
 
       "",
-      "Mon parcours et mes compétences [par ici](/info)",
+      "Mon parcours et mes compétences [par ici](/about)",
     ],
     email: "ringressi.anthony@gmail.com",
   },
