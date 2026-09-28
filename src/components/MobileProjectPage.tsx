@@ -79,7 +79,7 @@ function NextProjectLink({
         src={nextProject.src}
         alt={nextProject.name}
         style={{ aspectRatio: TILE_ASPECT }}
-        className="w-full rounded-lg object-cover"
+        className="w-full rounded-lg border border-[rgba(3,13,38,0.08)] object-cover"
       />
     </button>
   );
@@ -147,7 +147,7 @@ export function MobileProjectPage({
                 style={{
                   aspectRatio: image.contain && image.aspectRatio ? image.aspectRatio : TILE_ASPECT,
                 }}
-                className="overflow-hidden rounded-xl"
+                className="overflow-hidden rounded-xl border border-[rgba(3,13,38,0.08)]"
               >
                 <AutoplayVideo
                   src={image.src}
@@ -161,7 +161,10 @@ export function MobileProjectPage({
                 style={{
                   aspectRatio: image.contain && image.aspectRatio ? image.aspectRatio : TILE_ASPECT,
                 }}
-                className={cn("w-full rounded-xl", image.contain ? "object-contain" : "object-cover")}
+                className={cn(
+                  "w-full rounded-xl border border-[rgba(3,13,38,0.08)]",
+                  image.contain ? "object-contain" : "object-cover",
+                )}
               />
             )}
             {image.label && (

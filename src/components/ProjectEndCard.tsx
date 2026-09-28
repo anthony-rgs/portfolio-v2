@@ -106,7 +106,7 @@ export function ProjectEndCard({
               height: "auto",
               flexShrink: 0,
             }}
-            className="rounded-lg"
+            className="rounded-lg border border-[rgba(3,13,38,0.08)]"
           />
         </button>
       </ScrollRevealItem>

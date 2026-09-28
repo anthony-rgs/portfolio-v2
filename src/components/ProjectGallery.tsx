@@ -378,7 +378,7 @@ export function ProjectGallery({
               <div
                 key={i}
                 style={{ width: tileWidths[i], flexShrink: 0 }}
-                className="h-full overflow-hidden rounded-xl"
+                className="h-full overflow-hidden rounded-xl border border-[rgba(3,13,38,0.08)]"
               >
                 <AutoplayVideo
                   src={image.src}
@@ -394,7 +394,10 @@ export function ProjectGallery({
                 src={image.src}
                 alt={alt}
                 style={{ width: tileWidths[i], flexShrink: 0 }}
-                className={cn("h-full rounded-xl", image.contain ? "object-contain" : "object-cover")}
+                className={cn(
+                  "h-full rounded-xl border border-[rgba(3,13,38,0.08)]",
+                  image.contain ? "object-contain" : "object-cover",
+                )}
               />
             ),
           )}
