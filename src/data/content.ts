@@ -259,7 +259,8 @@ export const content: SiteContent = {
         },
       ],
       name: "Vexia Studio",
-      smallDescription: "Description à venir.",
+      smallDescription:
+        "Générateur de vidéos short-form : choisis un template, colle tes liens YouTube, et Vexia télécharge, découpe et assemble ta vidéo en 9:16, prête pour TikTok, Reels et Shorts.",
       headline: ["Édition vidéo", "Automatisation", "Temps réel", "SaaS"],
       titleLines: ["Vexia Studio"],
       subtitleLines: [
